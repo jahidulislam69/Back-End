@@ -2,6 +2,8 @@ import express, { application } from "express";
 import path from "path";
 import connectToMongoDB from "./Connect.js";
 import URL from "./Models/model.js"
+import cookieParser from 'cookie-parser';
+import { restrictToLoggedinUserOnly, checkAuth} from "./middlewares/auth.js"
 
 
 
@@ -15,10 +17,12 @@ const PORT = 8001;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false}))
+app.use(cookieParser())
 
 
 app.set("view engine", "ejs")
 app.set("views", path.resolve("./views"))
+
 
 
 connectToMongoDB("mongodb+srv://jahidulhassa777:98904544@cluster0.ofn1q.mongodb.net/shortUrl")
@@ -31,8 +35,8 @@ connectToMongoDB("mongodb+srv://jahidulhassa777:98904544@cluster0.ofn1q.mongodb.
 //         urls: allUrls,
 //     })
 // })
-app.use('/', staticRoute);
-app.use("/url", urlRoute);
+app.use('/',checkAuth, staticRoute);
+app.use("/url", restrictToLoggedinUserOnly, urlRoute);
 app.use('/user', userRoute);
 
 

@@ -2,13 +2,14 @@ import jwt from "jsonwebtoken";
 const secret = "shouvo@gmailandSomethingWhichStartWith1234"
 
 
+const sessionIdTouserMap = new Map();
 
-function setUser(user){
-    return json.sign(user, secret)
+function setUser(id, user){
+    sessionIdTouserMap.set(id, user)
 }
 
-function getUser(id, user){
-    return sessionIdToUserMap.set(id);
+function getUser(id,){
+    return sessionIdTouserMap.get(id)
 }
 
 export {
